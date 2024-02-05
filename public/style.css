@@ -29,7 +29,19 @@ body {
 
 .MainBody1 {
     background-color: rebeccapurple;
+
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(auto-fill, 50px);
 }
 .MainBody2 {
     background-color: red;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: rgb(3, 255, 3);
 }

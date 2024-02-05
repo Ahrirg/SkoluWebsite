@@ -25,6 +25,16 @@ const storage = multer.diskStorage({
 
 const uploads = multer({ storage: storage })
 
+async function asyncfunction(user, data, returnjson, length) { // reads all data sync and returns to main function
+
+    for(var i = 0; i < length; i++) {
+         const person = data[i];
+        var txtdata = fs.readFileSync(__dirname + '/../Users/' + user + '/'+ person + "/BendraSuma.txt");
+        returnjson[person] = txtdata.toString('utf-8');
+    }
+
+    return returnjson;
+}
 
 router.post('/switch',uploads.array('files') , (req, res) => {
     const user = req.body.user;
@@ -35,18 +45,48 @@ router.post('/switch',uploads.array('files') , (req, res) => {
         }
         var returnjson = {}
 
-        for(var i = 0; i < data.length; i++) {
-            const person = data[i];
-            fs.readFile(__dirname + '/../Users/' + user + '/'+ person + "/BendraSuma.txt", (err, txtdata) => {
-                console.log(txtdata.toString('utf-8'));
-                returnjson[person] = txtdata.toString('utf-8'); // call an async function,
-            })
-        }
+        asyncfunction(user, data, returnjson, data.length);
 
         res.json(returnjson)
-
     })
 })
 
+async function ReWrite(user, name, suma) {
+    var oldtxtdata = fs.readFileSync(__dirname + "/../Users/" + user + "/" + name + "/BendraSuma.txt");
+    
+    // async code for writing into Bendra suma.txt
+    var content;
+
+    console.log(parseInt(oldtxtdata))
+
+    if (parseInt(oldtxtdata) == NaN) { // krc neveik kazkode duod NaN jei jau yra empty
+        content = parseInt(suma);
+    } else {
+        content = (parseInt(oldtxtdata) + parseInt(suma));
+    }
+    var contentString = content.toString()
+
+    fs.writeFile(__dirname + "/../Users/" + user + "/" + name + "/BendraSuma.txt", contentString, err=> {
+        if (err) {
+            console.log(err);
+        }
+    })
+
+    // async code for skolulist.txt
+    const dateTimeObject = new Date();
+
+    var content2 = `Eurai:${suma}  Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}`
+    await fs.appendFileSync(__dirname + "/../Users/" + user + "/" + name + "/SkoluList.txt", content2)
+}
+
+router.post('/add',uploads.array('files') , (req, res) => {
+    var User = req.body.User;
+    var Name = req.body.Name;
+    var Suma = req.body.Suma;
+    res.json({message: "ok"})
+
+    ReWrite(User, Name, Suma);
+    
+})
 
 module.exports = router;
