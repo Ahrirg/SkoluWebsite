@@ -57,7 +57,7 @@ async function ReWrite(user, name, suma) {
     // async code for writing into Bendra suma.txt
     var content;
 
-    console.log(parseInt(oldtxtdata))
+    //console.log(parseInt(oldtxtdata))
 
     if (parseInt(oldtxtdata) == NaN) { // krc neveik kazkode duod NaN jei jau yra empty
         content = parseInt(suma);
@@ -79,6 +79,33 @@ async function ReWrite(user, name, suma) {
     await fs.appendFileSync(__dirname + "/../Users/" + user + "/" + name + "/SkoluList.txt", content2)
 }
 
+async function checkDirIfUser(Name) {
+    var arr = await fs.readdirSync(__dirname + "/../Users/");
+
+    for (var i = 0; i< arr.length; i++) {
+        if (arr[i] == Name) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+async function UpdateNameUser(User, Name, Suma) {
+    if(await checkDirIfUser(Name) == true) {
+
+        var sum = parseInt('-' + Suma.toString())
+        console.log(sum)
+        ReWrite(Name, User, sum);
+
+        const dateTimeObject = new Date();
+
+        var content = `Suma:${sum} User: ${User} Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}`
+        await fs.appendFileSync(__dirname + "/../Users/" + Name + "/" + User + "/IncomingSkolos.txt", content)
+    }
+}
+
+
 router.post('/add',uploads.array('files') , (req, res) => {
     var User = req.body.User;
     var Name = req.body.Name;
@@ -86,7 +113,8 @@ router.post('/add',uploads.array('files') , (req, res) => {
     res.json({message: "ok"})
 
     ReWrite(User, Name, Suma);
-    
+
+    UpdateNameUser(User, Name, Suma)
 })
 
 module.exports = router;
