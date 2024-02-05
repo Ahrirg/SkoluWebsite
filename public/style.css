@@ -1,0 +1,35 @@
+body {
+    width: 1920px;
+    height: 1080px;
+}
+
+.firstlayer {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 10% 90%;
+}
+
+.Centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+}
+
+.Centereddiv {
+    width: 1500px;
+    height: 700px;
+    background-color: green;
+    display: grid;
+    grid-template-columns:50% 50%;
+    grid-template-rows: 100%;
+}
+
+.MainBody1 {
+    background-color: rebeccapurple;
+}
+.MainBody2 {
+    background-color: red;
+}
