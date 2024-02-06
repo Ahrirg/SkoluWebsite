@@ -1,3 +1,4 @@
+
 var CurrentUser = ""
 
 function start(){
@@ -34,10 +35,23 @@ function addActivityItem(){
     })
 }
 
-function Submit(){
+async function summa() {
+    var suma = parseInt(document.getElementById('Suma').value);
+    console.log(suma)
+    if (suma.toString() == "NaN") {
+        //alert('Suma yra ne interger')
+        return 0;
+    } else {
+        //alert('Suma yra')
+        return(await document.getElementById('Suma').value);
+    }
+}
+
+async function Submit(){
 
     var Name = document.getElementById('Name').value
-    var Suma = document.getElementById('Suma').value
+    //console.log('veik')
+    var Suma = await summa();
 
     var formData = new FormData;
 

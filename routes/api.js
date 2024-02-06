@@ -75,7 +75,7 @@ async function ReWrite(user, name, suma) {
     // async code for skolulist.txt
     const dateTimeObject = new Date();
 
-    var content2 = `Eurai:${suma}  Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}`
+    var content2 = `Eurai:${suma}  Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}\n`
     await fs.appendFileSync(__dirname + "/../Users/" + user + "/" + name + "/SkoluList.txt", content2)
 }
 
@@ -94,17 +94,48 @@ async function checkDirIfUser(Name) {
 async function UpdateNameUser(User, Name, Suma) {
     if(await checkDirIfUser(Name) == true) {
 
-        var sum = parseInt('-' + Suma.toString())
-        console.log(sum)
+        var sum
+        if (Suma.toString()[0] == '-') {
+            sum = parseInt(Suma.toString().slice(1))
+        } else {
+            sum = parseInt('-' + Suma.toString())
+        }
+
+        //console.log(sum)
         ReWrite(Name, User, sum);
 
         const dateTimeObject = new Date();
 
-        var content = `Suma:${sum} User: ${User} Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}`
+        var content = `Suma:${sum} User: ${User} Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}\n`
         await fs.appendFileSync(__dirname + "/../Users/" + Name + "/" + User + "/IncomingSkolos.txt", content)
     }
 }
 
+async function tikrinam(User, Name, Suma ,data) {
+    //console.log(data)
+    for (var i = 0; i < data.length; i++) {
+        if (data[i] == Name) {
+            await yes(User, Name, Suma);
+            return 0;
+        }
+    }
+    await no(User, Name, Suma);
+    return 0;
+}
+
+async function yes(User, Name, Suma){
+    await ReWrite(User, Name, Suma);
+    await UpdateNameUser(User, Name, Suma)
+}
+async function no(User, Name, Suma) {
+    await fs.mkdirSync(__dirname + "/../Users/" + User + "/" + Name)
+    await fs.writeFileSync(__dirname + "/../Users/" + User + "/" + Name + '/BendraSuma.txt', "0")
+    await fs.writeFileSync(__dirname + "/../Users/" + User + "/" + Name + '/IncomingSkolos.txt', '')
+    await fs.writeFileSync(__dirname + "/../Users/" + User + "/" + Name + '/SkoluList.txt', '')
+
+	await ReWrite(User, Name, Suma);
+    await UpdateNameUser(User, Name, Suma)
+}
 
 router.post('/add',uploads.array('files') , (req, res) => {
     var User = req.body.User;
@@ -112,9 +143,9 @@ router.post('/add',uploads.array('files') , (req, res) => {
     var Suma = req.body.Suma;
     res.json({message: "ok"})
 
-    ReWrite(User, Name, Suma);
-
-    UpdateNameUser(User, Name, Suma)
+    fs.readdir(__dirname + "/../Users/" + User, (err, data) => {
+        tikrinam(User, Name, Suma ,data);
+    }) 
 })
 
 module.exports = router;
