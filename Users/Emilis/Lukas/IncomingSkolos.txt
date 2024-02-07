@@ -32,3 +32,10 @@ Suma:NaN User: Lukas Date:2024-1-2
 Suma:NaN User: Lukas Date:2024-1-2
 Suma:-10 User: Lukas Date:2024-1-2
 Suma:-125 User: Lukas Date:2024-1-2
+Suma:-26 User: Lukas Date:2024-1-3
+Suma:-26 User: Lukas Date:2024-1-3
+Suma:-26 User: Lukas Date:2024-1-3
+Suma:13 User: Lukas Date:2024-1-3
+Suma:-10 User: Lukas Date:2024-1-3
+Suma:-51 User: Lukas Date:2024-1-3
+Suma:-51 User: Lukas Date:2024-1-3

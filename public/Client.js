@@ -20,17 +20,18 @@ function addActivityItem(){
         document.getElementById("Skolininkai").innerHTML = ""
 
         for (var i in data) {
+            if(data[i] != 0) {
+                var innerhtml = `<div class="listText right">${i}:</div>`;
 
-            var innerhtml = `<div>${i}</div>`;
-
-            if(data[i][0] == '-') {
-                innerhtml += `<div class="red">${data[i]}</div>`
-            } else {
-                innerhtml += `<div class="green">${data[i]}</div>`
+                if(data[i][0] == '-') {
+                    innerhtml += `<div class="red listText">${data[i]} €</div>`
+                } else {
+                    innerhtml += `<div class="green listText">${data[i]} €</div>`
+                }
+            
+                // console.log(innerhtml + "sitas")
+                document.getElementById("Skolininkai").innerHTML += innerhtml;
             }
-
-            // console.log(innerhtml + "sitas")
-            document.getElementById("Skolininkai").innerHTML += innerhtml;
         }
     })
 }
