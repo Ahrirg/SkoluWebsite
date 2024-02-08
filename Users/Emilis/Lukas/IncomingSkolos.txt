@@ -39,3 +39,4 @@ Suma:13 User: Lukas Date:2024-1-3
 Suma:-10 User: Lukas Date:2024-1-3
 Suma:-51 User: Lukas Date:2024-1-3
 Suma:-51 User: Lukas Date:2024-1-3
+Suma:-1512 User: Lukas Date:2024-1-4

@@ -1,4 +1,5 @@
 body {
+    background-color: rgb(74,  203, 214);
     width: 1920px;
     height: 1080px;
 }
@@ -21,14 +22,15 @@ body {
 .Centereddiv {
     width: 1500px;
     height: 700px;
-    background-color: green;
+    background-color: rgb(218, 254, 255);
+    border-radius: 10px;
     display: grid;
     grid-template-columns:50% 50%;
     grid-template-rows: 100%;
 }
 
 .MainBody1 {
-    background-color: rebeccapurple;
+    
 
     display: grid;
     grid-template-columns: 50% 50%;
@@ -42,12 +44,16 @@ body {
     grid-template-rows: 50% 50%;
 }
 .inputDiv {
-    background-color: red;
+    
     margin: auto;
     width: auto;
 }
 .incomingDiv {
-    background-color: blueviolet;
+    background: linear-gradient(151deg, rgba(51,51,51,1) 27%, rgba(24,24,24,1) 100%);
+    border-radius: 13px;
+    border-color: rgb(119, 119, 119);
+    border-style:solid;
+    border-width: 5px;
 }
 
 .submitbox {
@@ -76,6 +82,7 @@ body {
     font-size: 40px;
     font-weight: 600;
 }
+
 .right {
     text-align: right;
     margin-right: 20px;
@@ -83,8 +90,20 @@ body {
 
 .red {
     color: red;
+    text-shadow: 0px 0px 2px rgb(0, 0, 0);
+    font-weight: 900;
 }
 
 .green {
     color: rgb(3, 255, 3);
+    text-shadow: 0px 0px 2px rgb(0, 0, 0);
+    font-weight: 900;
+}
+
+.UserSelectionBox {
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 600;
 }

@@ -28,9 +28,12 @@ const uploads = multer({ storage: storage })
 async function asyncfunction(user, data, returnjson, length) { // reads all data sync and returns to main function
 
     for(var i = 0; i < length; i++) {
-         const person = data[i];
-        var txtdata = fs.readFileSync(__dirname + '/../Users/' + user + '/'+ person + "/BendraSuma.txt");
-        returnjson[person] = txtdata.toString('utf-8');
+        const person = data[i];
+        //console.log(person)
+        if (person != "Logs.txt") {
+            var txtdata = fs.readFileSync(__dirname + '/../Users/' + user + '/'+ person + "/BendraSuma.txt");
+            returnjson[person] = txtdata.toString('utf-8');
+        }
     }
 
     return returnjson;
@@ -77,6 +80,7 @@ async function ReWrite(user, name, suma) {
 
     var content2 = `Eurai:${suma}  Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}\n`
     await fs.appendFileSync(__dirname + "/../Users/" + user + "/" + name + "/SkoluList.txt", content2)
+    await fs.appendFileSync(__dirname + "/../Users/" + user + "/Logs.txt", `Simple - ${name}  ` + content2)
 }
 
 async function checkDirIfUser(Name) {
@@ -108,6 +112,7 @@ async function UpdateNameUser(User, Name, Suma) {
 
         var content = `Suma:${sum} User: ${User} Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}\n`
         await fs.appendFileSync(__dirname + "/../Users/" + Name + "/" + User + "/IncomingSkolos.txt", content)
+        await fs.appendFileSync(__dirname + "/../Users/" + Name + "/Logs.txt", "INCOMING! " + content)
     }
 }
 
