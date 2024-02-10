@@ -4,8 +4,6 @@ const router = express.Router();
 const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
-const { checkPrimeSync } = require('crypto');
-
 
 const CC_dir = __dirname;
 
@@ -99,7 +97,7 @@ async function ReWrite(user, name, suma) {
         }
     })
 
-    fs.appendFileFile(__dirname + "/../Users/" + user + "/BendraSumaLogs.txt", `[${name}] Eur: ${contentString}`, err=> {
+    fs.appendFile(__dirname + "/../Users/" + user + "/BendraSumaLogs.txt", `[${name}] Eur: ${contentString} \n`, err=> {
         if (err) {
             console.log(err);
         }
