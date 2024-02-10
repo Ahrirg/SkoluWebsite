@@ -1,4 +1,5 @@
 
+
 var CurrentUser = ""
 
 function start(){
@@ -7,38 +8,51 @@ function start(){
 
 function addActivityItem(){
     //console.log("User Switched");
-
     var formData = new FormData;
     formData.append('user', document.getElementById("User").value)
     CurrentUser = document.getElementById("User").value;
 
-    fetch('/api/switch', {
-        method: 'POST',
-        body: formData
-    }).then(res => res.json()).then(data => {
-        //console.log(data);
-        document.getElementById("Skolininkai").innerHTML = ""
-
-        for (var i in data) {
-            if(data[i] != 0) {
-                var innerhtml = `<div class="listText right">${i}:</div>`;
-
-                if(data[i][0] == '-') {
-                    innerhtml += `<div class="red listText">${data[i]} €</div>`
-                } else {
-                    innerhtml += `<div class="green listText">${data[i]} €</div>`
-                }
-            
-                // console.log(innerhtml + "sitas")
-                document.getElementById("Skolininkai").innerHTML += innerhtml;
+    if (CurrentUser != ""){
+        fetch('/api/Logs', {
+            method: 'POST',
+            body: formData
+        }).then(res => res.json()).then(data => {
+            var arr = data.message.toString().split('\n')
+            //console.log(arr)
+            document.getElementById('incomingDiv').innerHTML = ``
+            for(var i = 0; i < arr.length; i++) {
+                //console.log(arr[i])
+                document.getElementById('incomingDiv').innerHTML += `<p>${arr[i]}</p>`
             }
-        }
-    })
+        })
+
+        fetch('/api/switch', {
+            method: 'POST',
+            body: formData
+        }).then(res => res.json()).then(data => {
+            document.getElementById("Skolininkai").innerHTML = ""
+
+            for (var i in data) {
+                if(data[i] != 0) {
+                    var innerhtml = `<div class="listText right">${i}:</div>`;
+
+                    if(data[i][0] == '-') {
+                        innerhtml += `<div class="red listText">${data[i]} €</div>`
+                    } else {
+                        innerhtml += `<div class="green listText">${data[i]} €</div>`
+                    }
+                
+                    // console.log(innerhtml + "sitas")
+                    document.getElementById("Skolininkai").innerHTML += innerhtml;
+                }
+            }
+        })
+    }
 }
 
 async function summa() {
     var suma = parseInt(document.getElementById('Suma').value);
-    console.log(suma)
+    //console.log(suma)
     if (suma.toString() == "NaN") {
         //alert('Suma yra ne interger')
         return 0;

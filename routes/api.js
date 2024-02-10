@@ -4,6 +4,7 @@ const router = express.Router();
 const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
+const { checkPrimeSync } = require('crypto');
 
 
 const CC_dir = __dirname;
@@ -30,7 +31,7 @@ async function asyncfunction(user, data, returnjson, length) { // reads all data
     for(var i = 0; i < length; i++) {
         const person = data[i];
         //console.log(person)
-        if (person != "Logs.txt") {
+        if (person != "Logs.txt" && person !='BendraSumaLogs.txt') {
             var txtdata = fs.readFileSync(__dirname + '/../Users/' + user + '/'+ person + "/BendraSuma.txt");
             returnjson[person] = txtdata.toString('utf-8');
         }
@@ -54,22 +55,51 @@ router.post('/switch',uploads.array('files') , (req, res) => {
     })
 })
 
+
+
+router.post('/Logs',uploads.array('files') , (req, res) => {
+    var user = req.body.user
+    var loc = __dirname + '/../Users/' + user + "/Logs.txt"
+    //console.log(loc)
+    fs.readFile(loc, (err, data) => {
+        if (err) {
+            console.log(err)
+        }
+        var arr = data.toString().split('\n').slice(-9)
+
+        var string = ''
+        for (var i = 0; i < arr.length; i++) {
+            string += arr[i] + '\n'
+        }
+        //console.log(string)
+        res.json({message: string})
+    })
+} )
+
+
+//-=-=-=-=-
 async function ReWrite(user, name, suma) {
     var oldtxtdata = fs.readFileSync(__dirname + "/../Users/" + user + "/" + name + "/BendraSuma.txt");
     
     // async code for writing into Bendra suma.txt
     var content;
 
-    //console.log(parseInt(oldtxtdata))
+    //console.log(parseFloat(oldtxtdata))
 
-    if (parseInt(oldtxtdata) == NaN) { // krc neveik kazkode duod NaN jei jau yra empty
-        content = parseInt(suma);
+    if (parseFloat(oldtxtdata) == NaN) { // krc neveik kazkode duod NaN jei jau yra empty
+        content = parseFloat(suma);
     } else {
-        content = (parseInt(oldtxtdata) + parseInt(suma));
+        content = (parseFloat(oldtxtdata) + parseFloat(suma));
     }
     var contentString = content.toString()
 
     fs.writeFile(__dirname + "/../Users/" + user + "/" + name + "/BendraSuma.txt", contentString, err=> {
+        if (err) {
+            console.log(err);
+        }
+    })
+
+    fs.appendFileFile(__dirname + "/../Users/" + user + "/BendraSumaLogs.txt", `[${name}] Eur: ${contentString}`, err=> {
         if (err) {
             console.log(err);
         }
@@ -80,7 +110,7 @@ async function ReWrite(user, name, suma) {
 
     var content2 = `Eurai:${suma}  Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}\n`
     await fs.appendFileSync(__dirname + "/../Users/" + user + "/" + name + "/SkoluList.txt", content2)
-    await fs.appendFileSync(__dirname + "/../Users/" + user + "/Logs.txt", `Simple - ${name}  ` + content2)
+    await fs.appendFileSync(__dirname + "/../Users/" + user + "/Logs.txt", `${name}  ` + content2)
 }
 
 async function checkDirIfUser(Name) {
@@ -100,9 +130,9 @@ async function UpdateNameUser(User, Name, Suma) {
 
         var sum
         if (Suma.toString()[0] == '-') {
-            sum = parseInt(Suma.toString().slice(1))
+            sum = parseFloat(Suma.toString().slice(1))
         } else {
-            sum = parseInt('-' + Suma.toString())
+            sum = parseFloat('-' + Suma.toString())
         }
 
         //console.log(sum)
@@ -112,7 +142,7 @@ async function UpdateNameUser(User, Name, Suma) {
 
         var content = `Suma:${sum} User: ${User} Date:${dateTimeObject.getFullYear()}-${dateTimeObject.getMonth()}-${dateTimeObject.getDay()}\n`
         await fs.appendFileSync(__dirname + "/../Users/" + Name + "/" + User + "/IncomingSkolos.txt", content)
-        await fs.appendFileSync(__dirname + "/../Users/" + Name + "/Logs.txt", "INCOMING! " + content)
+        await fs.appendFileSync(__dirname + "/../Users/" + Name + "/Logs.txt", "INCOMING! "+ User +` Eur: ${sum}\n`)
     }
 }
 
