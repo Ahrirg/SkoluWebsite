@@ -36,10 +36,14 @@ function addActivityItem(){
                 if(data[i] != 0) {
                     var innerhtml = `<div class="listText right">${i}:</div>`;
 
-                    if(data[i][0] == '-') {
-                        innerhtml += `<div class="red listText">${data[i]} €</div>`
+                    var number = parseFloat(data[i]).toFixed(2)
+
+                    console.log(number)
+                    console.log(data[i])
+                    if(data[i][0] == '-') {                        
+                        innerhtml += `<div class="red listText">${number} €</div>`
                     } else {
-                        innerhtml += `<div class="green listText">${data[i]} €</div>`
+                        innerhtml += `<div class="green listText">${number} €</div>`
                     }
                 
                     // console.log(innerhtml + "sitas")
